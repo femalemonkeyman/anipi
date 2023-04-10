@@ -9,7 +9,9 @@ environment:
 dependencies:
   dart_frog: ^0.3.5
   dio: 
-  html: 
+  html:
+  chitose: 
+  encrypt: 
 
 dev_dependencies:
   mocktail: ^0.3.0

@@ -34,9 +34,9 @@ Future<frog.Response?> onRequest(frog.RequestContext context) async {
       return frog.Response.json(body: episodes);
     } catch (e) {
       return frog.Response(
-        body: e.toString(),
+        body: "Something did a fucky wuckie",
       );
     }
   }
-  return frog.Response(body: "Needs a mal ID");
+  return frog.Response(body: "Needs a malId");
 }
