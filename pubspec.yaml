@@ -11,7 +11,8 @@ dependencies:
   dio: 
   html:
   chitose: 
-  encrypt: 
+  encrypt:
+  dio_cookie_manager:
 
 dev_dependencies:
   mocktail: ^0.3.0
