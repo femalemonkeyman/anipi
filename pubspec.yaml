@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">3.0.0"
 
 dependencies:
   dart_frog: ^0.3.5
@@ -12,7 +12,10 @@ dependencies:
   html:
   chitose: 
   encrypt:
-  dio_cookie_manager:
+  compute:
+  petitparser: 
+  http: ^0.13.5
+  js_unpack:
 
 dev_dependencies:
   mocktail: ^0.3.0
