@@ -13,9 +13,6 @@ dependencies:
   chitose: 
   encrypt:
   compute:
-  petitparser: 
-  http: ^0.13.5
-  js_unpack:
 
 dev_dependencies:
   mocktail: ^0.3.0

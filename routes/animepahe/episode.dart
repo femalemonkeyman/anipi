@@ -2,7 +2,7 @@ import 'package:dart_frog/dart_frog.dart' as frog;
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
-import 'package:js_unpack/js_unpack.dart';
+import '../../jsunpack.dart';
 
 Future<frog.Response> onRequest(frog.RequestContext context) async {
   if (context.request.uri.queryParameters.containsKey('id')) {
@@ -31,26 +31,12 @@ Future<frog.Response> onRequest(frog.RequestContext context) async {
           ),
         ))
             .data);
-        print(
-          arr
-              .getElementsByTagName('script')
-              .where((element) => element.text.contains('eval'))
-              .first
-              .text,
-        );
-        // print(JsUnpack.detect(
-        //   arr
-        //       .getElementsByTagName('script')
-        //       .where((element) => element.text.contains('eval'))
-        //       .first
-        //       .text,
-        // ));
-        print(JsUnpack(
+        sources.add(JsUnpack(
           '\r${arr.getElementsByTagName('script').where((element) => element.text.contains('eval')).first.text}',
-        ).unpack());
-        break;
+        ).unpack().split('source=\'')[1].split('\'')[0]);
       }
     }
+    return frog.Response.json(body: {'sources': sources});
   }
 
   return frog.Response(body: 'Needs an id');
