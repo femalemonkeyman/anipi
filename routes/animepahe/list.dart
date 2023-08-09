@@ -1,3 +1,4 @@
+import 'package:compute/compute.dart';
 import 'package:dart_frog/dart_frog.dart' as frog;
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart';
@@ -21,8 +22,14 @@ Future<frog.Response> onRequest(frog.RequestContext context) async {
     final String link =
         'https://animepahe.ru/api?m=release&id=$id&sort=episode_asc';
     final Map anime = (await Dio().get(link)).data;
-    for (int i = 2; i <= anime['last_page']; i++) {
-      anime['data'].addAll((await Dio().get('$link&page=$i')).data['data']);
+    if (anime['last_page'] > 1) {
+      for (int i = 2; i <= anime['last_page']; i++) {
+        anime['data'].addAll(
+          await compute((message) async {
+            return (await Dio().get('$message&page=$i')).data['data'];
+          }, link),
+        );
+      }
     }
     final List<Map> data = [];
     for (Map i in anime['data']) {

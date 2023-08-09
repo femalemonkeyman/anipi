@@ -5,7 +5,7 @@ import 'list.dart';
 Future<frog.Response> onRequest(frog.RequestContext context) async {
   if (context.request.uri.queryParameters.containsKey("id")) {
     final Dio dio = Dio();
-    final List<String> headers = await getToken(dio);
+    final List<String> headers = await getToken();
     final Map info = (await dio.post(
       '$baseUrl/${context.request.uri.queryParameters['id']}',
       options: Options(

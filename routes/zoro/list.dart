@@ -1,12 +1,14 @@
 import 'dart:convert';
-
+import 'dart:isolate';
 import 'package:dart_frog/dart_frog.dart' as frog;
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-Future<frog.Response?> onRequest(frog.RequestContext context) async {
-  final String zoro = "https://zoro.to/";
+const String zoro = "https://aniwatch.to/";
+
+Future<frog.Response> onRequest(frog.RequestContext context) async {
+  print(Isolate.current.debugName);
   if (context.request.uri.queryParameters.containsKey('malid')) {
     try {
       final Map syncResponse = (await Dio().get(
@@ -21,8 +23,9 @@ Future<frog.Response?> onRequest(frog.RequestContext context) async {
       );
       final Document episodeList = parse(jsonDecode(html.data)['html']);
       List episodes = [];
-      for (Element i
-          in episodeList.getElementsByClassName('ssl-item  ep-item')) {
+      final List elements =
+          episodeList.getElementsByClassName('ssl-item  ep-item');
+      for (Element i in elements) {
         episodes.add(
           {
             "episode": i.attributes['data-number'],

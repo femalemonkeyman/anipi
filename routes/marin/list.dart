@@ -5,13 +5,12 @@ const String baseUrl = 'https://marin.moe/anime';
 
 Future<frog.Response> onRequest(frog.RequestContext context) async {
   if (context.request.uri.queryParameters.containsKey("malid")) {
-    final Dio dio = Dio();
-    final Map syncResponse = (await dio.get(
+    final Map syncResponse = (await Dio().get(
             'https://api.malsync.moe/mal/anime/${context.request.uri.queryParameters['malid']}'))
         .data;
     final String id = syncResponse['Sites']['Marin'].keys.first;
-    final List<String> headers = await getToken(dio);
-    final Map info = (await dio.post(
+    final List<String> headers = await getToken();
+    final Map info = (await Dio().post(
       '$baseUrl/$id',
       options: Options(
         headers: {
@@ -42,7 +41,7 @@ Future<frog.Response> onRequest(frog.RequestContext context) async {
   return frog.Response(body: 'Needs a malid');
 }
 
-Future<List<String>> getToken(Dio dio) async {
+Future<List<String>> getToken() async {
   final String headers = (await Dio().get(
     'https://marin.moe/anime',
     options: Options(
