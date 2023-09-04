@@ -4,7 +4,6 @@ import 'package:dart_frog/dart_frog.dart' as frog;
 import 'package:string_similarity/string_similarity.dart';
 
 Future<frog.Response?> onRequest(frog.RequestContext context) async {
-  //name.split(pattern).getRange(0, 3);
   if (context.request.uri.queryParameters.containsKey('name')) {
     final name = context.request.uri.queryParameters['name'];
     final Map json = (await Dio().post(

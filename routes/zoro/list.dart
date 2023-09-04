@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
 import 'package:dart_frog/dart_frog.dart' as frog;
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
@@ -8,7 +7,6 @@ import 'package:html/parser.dart';
 const String zoro = "https://aniwatch.to/";
 
 Future<frog.Response> onRequest(frog.RequestContext context) async {
-  print(Isolate.current.debugName);
   if (context.request.uri.queryParameters.containsKey('malid')) {
     try {
       final Map syncResponse = (await Dio().get(

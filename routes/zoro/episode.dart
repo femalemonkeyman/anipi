@@ -63,27 +63,20 @@ String decrypt(final String encrypted, final String passphrase) {
   final Uint8List encryptedBytesWithSalt = base64.decode(encrypted);
   final Uint8List encryptedBytes =
       encryptedBytesWithSalt.sublist(16, encryptedBytesWithSalt.length);
-  final salt = encryptedBytesWithSalt.sublist(8, 16);
-  final (key, iv) = deriveKeyAndIV(passphrase, salt);
+  final (key, iv) =
+      deriveKeyAndIV(passphrase, encryptedBytesWithSalt.sublist(8, 16));
   return Encrypter(AES(key, mode: AESMode.cbc, padding: "PKCS7"))
       .decrypt64(base64.encode(encryptedBytes), iv: iv);
 }
 
 (Key, IV) deriveKeyAndIV(final String passphrase, final Uint8List salt) {
   final password = Uint8List.fromList(passphrase.codeUnits);
-  Uint8List concatenatedHashes = Uint8List(0);
+  final Uint8List concatenatedHashes = Uint8List(48);
   Uint8List currentHash = Uint8List(0);
-  Uint8List preHash = Uint8List(0);
-  while (concatenatedHashes.length < 48) {
-    if (currentHash.isNotEmpty) {
-      print(currentHash);
-      preHash = Uint8List.fromList(currentHash + password + salt);
-    } else {
-      preHash = Uint8List.fromList(password + salt);
-    }
-    currentHash = Uint8List.fromList(md5.convert(preHash).bytes);
-    concatenatedHashes =
-        Uint8List.fromList(concatenatedHashes + md5.convert(preHash).bytes);
+  for (int i = 0; i < 48; i += currentHash.length) {
+    currentHash =
+        Uint8List.fromList(md5.convert(currentHash + password + salt).bytes);
+    concatenatedHashes.setRange(i, i + currentHash.length, currentHash);
   }
   return (
     Key(concatenatedHashes.sublist(0, 32)),
