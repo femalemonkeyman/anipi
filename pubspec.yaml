@@ -7,12 +7,17 @@ environment:
   sdk: ">3.0.0"
 
 dependencies:
-  dart_frog: ^1.0.0
+
+  dart_frog: 
+    git:
+      url: https://github.com/VeryGoodOpenSource/dart_frog
+      path: packages/dart_frog
   dio: 
   html:
   chitose: 
   encrypt:
   compute:
+  string_similarity: 
 
 dev_dependencies:
   mocktail: ^0.3.0
